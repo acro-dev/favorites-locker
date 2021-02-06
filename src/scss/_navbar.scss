@@ -1,0 +1,22 @@
+header {
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 0.5rem 1rem;
+        margin-bottom: 2rem;
+
+        background-color: $color-background;
+
+        .brand {
+            font-size: 2rem;
+        }
+        ul {
+            display: flex;
+            li {
+                margin: 0 1rem;
+            }
+        }
+    }
+}
