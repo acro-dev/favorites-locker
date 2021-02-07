@@ -22,12 +22,12 @@
 
 ## Signup form:
 - [ ] HTML/CSS Form.
-- [ ] Validation of data.
-    - [ ] Unique username.
-    - [ ] Unique email && looks like an email.
-    - [ ] password have at least 8 caracteres.
-    - [ ] password confirmation is the same than password.
-- [ ] Database registration.
+- [x] Validation of data.
+    - [x] Unique username.
+    - [x] Unique email && looks like an email.
+    - [x] password have at least 8 caracteres.
+    - [x] password confirmation is the same than password.
+- [x] Database registration.
     - [ ] Set session.
     - [ ] Set cookies.
 

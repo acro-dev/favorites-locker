@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once '../app/functions/functions.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
