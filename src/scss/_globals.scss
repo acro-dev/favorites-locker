@@ -4,24 +4,29 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-size: 16px;
-    font-family: "Lobster Two", sans-serif;
 }
 
 body {
     background: #e55d87; /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom right, #5fc3e4, #e55d87); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-        to bottom right,
-        #5fc3e4,
-        #e55d87
-    );
+    background: linear-gradient(to bottom right, #5fc3e4, #e55d87);
     width: 100vw;
     min-height: 100vh; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-ul {
-    list-style-type: none;
+h1 {
+    font-family: "Lobster";
+    font-weight: lighter;
+    font-size: 4rem;
+
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+p {
+    line-height: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 a {

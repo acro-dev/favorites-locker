@@ -12,8 +12,8 @@
 
 <body>
     <header>
+        <div class="brand">Favorites-Locker</div>
         <nav>
-            <div class="brand">Favorites-Locker</div>
             <ul>
                 <?php
                 if (isset($_SESSION['username']) && $_SESSION['username'] != '') {
