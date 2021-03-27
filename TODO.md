@@ -8,6 +8,9 @@
     - [x] Suggest to Sign in.
     - [x] Suggest to Log in.
 
+## Navbar :
+- [ ] Make it responsive.
+
 ## Logout:
 - [x] Unset & destroy session.
 - [x] Redirect to home.
