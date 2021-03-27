@@ -2,11 +2,11 @@
 
 ## Index page:
 - If user is connected :
-    - [ ] Redirect to dashboard.
+    - [x] Redirect to dashboard.
 - If user is not connected :
-    - [ ] Display a description of the web site.
-    - [ ] Suggest to Sign in.
-    - [ ] Suggest to Log in.
+    - [x] Display a description of the web site.
+    - [x] Suggest to Sign in.
+    - [x] Suggest to Log in.
 
 ## Logout:
 - [x] Unset & destroy session.
