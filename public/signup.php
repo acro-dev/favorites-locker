@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../app/functions/functions.php';
 
 if (isset($_POST) && !empty($_POST)) {
@@ -36,30 +37,24 @@ if (isset($_POST) && !empty($_POST)) {
     if (empty($errors)) {
         // Connexion to db
         $pdo = getPDO();
-        $sql = 'SELECT username,email FROM users WHERE username="' . $username . '" OR email="' . $email . '"';
+        $sql = 'SELECT email FROM users WHERE email="' . $email . '"';
 
         $req = $pdo->query($sql);
         $data = $req->fetchAll(PDO::FETCH_ASSOC);
 
         if (!empty($data)) {
-            foreach ($data as $row) {
-                if (strtolower($row['username']) == strtolower($username)) {
-                    $errors['username'] = "Le nom d'utilisateur est déjà pris.";
-                }
-                if ($row['email'] == $email) {
-                    $errors['email'] = 'Un utilisateur avec cette adresse mail existe déjà.';
-                }
-            }
+            $errors['email'] = 'Un utilisateur avec cette adresse mail existe déjà.';
         }
     }
-    var_dump($errors);
 
     if (empty($errors)) {
         $sql = 'INSERT INTO users (username,email,password) VALUES (?,?,?)';
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$username, $email, $password]);
 
-        echo 'Utilisateur enregistré';
+        $_SESSION['username'] = ucfirst($username);
+        header('Location: /');
+        exit;
     }
 }
 ?>
@@ -71,11 +66,20 @@ if (isset($_POST) && !empty($_POST)) {
 <h1>S'enregistrer sur Favorites Locker !</h1>
 
 <form method="POST" id="signupForm">
+
+    <label for="username">Nom d'utilisateur</label>
     <input type="text" name="username" id="username" placeholder="Nom d'utilisateur">
+
+    <label for="email">E-Mail</label>
     <input type="text" name="email" id="email" placeholder="Votre email">
+
+    <label for="password">Mot de passe</label>
     <input type="password" name="password" id="password" placeholder="Mot de passe">
+
+    <label for="confirmPassword">Confirmation du mot de passe</label>
     <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmation du mot de passe">
-    <input type="submit" value="S'enregistrer">
+
+    <button type="submit">S'enregistrer</button>
 </form>
 
 <?php require '../templates/footer.php'; ?>

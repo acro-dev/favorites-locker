@@ -2,8 +2,8 @@
 
 function getPDO()
 {
-    $dsn = 'mysql:dbname=favorites_locker;host=localhost';
-    $user = 'root';
+    $dsn = 'mysql:dbname=favlocker;host=localhost';
+    $user = 'favlocker';
     $password = '';
 
     return new PDO($dsn, $user, $password);
