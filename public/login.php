@@ -7,20 +7,17 @@ require_once '../templates/header.php';
 
     <h1>Se connecter</h1>
 
-    <form class="inscription-form" action="">
+    <form action="">
         <label for="email">E-Mail</label>
         <input type="text" id="email" name="email">
 
         <label for="password">Mot de passe</label>
         <input type="password" id="password" name="password">
 
-        <label for="confirm-password">Confirmez votre mot de passe</label>
-        <input type="password" id="confirm-password" name="confirm-password">
-
-        <button>S'inscrire</button>
+        <button>Connexion</button>
     </form>
 </div>
 
 <?php
-require_once '../templates/header.php';
+require_once '../templates/footer.php';
 ?>
