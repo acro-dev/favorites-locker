@@ -17,8 +17,8 @@
 
 ## Login form:
 - [x] HTML/CSS Form.
-    - [ ] Username + password validation.
-    - [ ] Set session.
+    - [x] email + password validation.
+    - [x] Set session.
     - [ ] Set cookies.
 - [ ] Password lost feature.
 - [ ] Username lost feature.
@@ -31,7 +31,7 @@
     - [x] password have at least 8 caracteres.
     - [x] password confirmation is the same than password.
 - [x] Database registration.
-    - [ ] Set session.
+    - [x] Set session.
     - [ ] Set cookies.
 
 ## Dashboard page:
