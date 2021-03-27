@@ -13,7 +13,7 @@
 - [x] Redirect to home.
 
 ## Login form:
-- [ ] HTML/CSS Form.
+- [x] HTML/CSS Form.
     - [ ] Username + password validation.
     - [ ] Set session.
     - [ ] Set cookies.
