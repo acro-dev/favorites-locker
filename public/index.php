@@ -6,11 +6,7 @@ if (isset($_SESSION['username'])) {
     exit;
 }
 
-?>
-
-
-
-<?php require '../templates/header.php'; ?>
+require '../templates/header.php'; ?>
 <main>
     <h1>Bienvenue sur Favorites Locker</h1>
 
@@ -25,7 +21,7 @@ if (isset($_SESSION['username'])) {
     <p>
         Ainsi vous y aurait accès à partir de n'importe quel navigateur web :)
     </p>
-<main>
+</main>
 <section>
     <p>
         Si vous avez déjà un compte, <a href="#">connectez-vous</a>.
@@ -35,4 +31,4 @@ if (isset($_SESSION['username'])) {
     </p>
 
 
-<?php require '../templates/footer.php'; ?>
+    <?php require '../templates/footer.php'; ?>
