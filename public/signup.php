@@ -52,8 +52,7 @@ if (isset($_POST) && !empty($_POST)) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$username, $email, $password]);
 
-        $_SESSION['username'] = ucfirst($username);
-        header('Location: /');
+        header('Location: /login.php');
         exit;
     }
 }

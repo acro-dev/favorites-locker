@@ -18,6 +18,7 @@ if (isset($_POST) && !empty($_POST)) {
     if (!empty($data)) {
         if (password_verify($_POST['password'], $data['password'])) {
             $_SESSION['username'] = $data['username'];
+            $_SESSION['user_id'] = $data['id'];
             header('Location: /');
             exit;
         } else {

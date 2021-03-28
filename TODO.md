@@ -31,11 +31,11 @@
     - [x] password have at least 8 caracteres.
     - [x] password confirmation is the same than password.
 - [x] Database registration.
-    - [x] Set session.
+    - [ ] Set session.
     - [ ] Set cookies.
 
 ## Dashboard page:
-- [ ] Quick add fav (whith only url and name).
+- [x] Quick add fav (whith only url and name).
 - [ ] Add fav function.
     - [ ] Add name.
     - [ ] Add url.
@@ -45,7 +45,7 @@
     - [ ] Add icon.
         - [ ] Maximum size.
         - [ ] Maximum weight.
-- [ ] Remove fav function.
+- [x] Remove fav function.
 - [ ] Modify favorite.
     - [ ] Change name.
     - [ ] Change url.
