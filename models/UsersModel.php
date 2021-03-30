@@ -29,4 +29,15 @@ class UsersModel extends Model
             return false;
         }
     }
+
+    public function signup($data)
+    {
+        $this->username = $data['username'];
+        $this->email = $data['email'];
+        $this->password = $data['password'];
+
+        $sql = 'INSERT INTO ' . $this->table . ' (username,email,password) VALUES (?,?,?)';
+        $query = $this->_connection->prepare($sql);
+        $query->execute($this->username, $this->email, $this->password);
+    }
 }
