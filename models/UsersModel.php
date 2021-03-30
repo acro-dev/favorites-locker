@@ -48,4 +48,11 @@ class UsersModel extends Model
         $data = $query->fetch(PDO::FETCH_ASSOC);
         return $data;
     }
+
+    public function updateUser($property, $newValue, $id)
+    {
+        $sql = 'UPDATE ' . $this->table . ' SET ' . $property . '="' . $newValue . '" WHERE id=' . $id;
+        $query = $this->_connection->prepare($sql);
+        $query->execute();
+    }
 }

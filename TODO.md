@@ -59,12 +59,12 @@
     - [ ] If displayed by icon whithout icon set => display placeholder.
 
 ## Profile page:
-- [ ] Change username.
+- [x] Change username.
     - [ ] Verify unicity.
-    - [ ] Put change in database.
-- [ ] Change email.
+    - [x] Put change in database.
+- [x] Change email.
     - [ ] Verify if email is valid.
-    - [ ] Put change in database.
+    - [x] Put change in database.
 - [ ] Change password.
     - [ ] Check if password is valid.
     - [ ] Put change in database.

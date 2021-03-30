@@ -64,6 +64,9 @@ class UsersController extends Controller
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
             }
 
+            /**
+             * If no error : Create user in database.
+             */
             if (empty($data['usernameError']) && empty($data['emailError']) && empty($data['passwordError'])) {
                 $createUser = $this->UsersModel->signup($data);
 
@@ -110,6 +113,9 @@ class UsersController extends Controller
 
                 if ($loggedInUser) {
                     $this->createSession($loggedInUser);
+
+                    header('Location: /');
+                    exit();
                 } else {
                     $data['passwordError'] = 'Email or password was wrong';
                 }
@@ -124,19 +130,42 @@ class UsersController extends Controller
         $_SESSION['userID'] = $user['id'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['username'] = ucfirst($user['username']);
-
-        header('Location: /');
-        exit();
     }
 
     public function logout()
     {
-        unset($_SESSION);
         session_start();
+        unset($_SESSION);
         session_unset();
         session_destroy();
 
         header('Location: /');
         exit();
+    }
+
+    public function editEmail($id)
+    {
+        $data = $this->UsersModel->getOne($id);
+        $this->render('editProfile', $data);
+    }
+
+    public function editProfile($property)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $newValue = $_POST[$property];
+            $id = $_POST['id'];
+            $this->UsersModel->updateUser($property, $newValue, $id);
+            $user = $this->UsersModel->getOne($id);
+            $this->createSession($user);
+
+
+            header('Location: /dashboard/profile/' . $id);
+        } else {
+            $data = $this->UsersModel->getOne($_SESSION['userID']);
+            $data['property'] = $property;
+
+            $this->render('editProfile', $data);
+        }
     }
 }

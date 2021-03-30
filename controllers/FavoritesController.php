@@ -34,7 +34,7 @@ class FavoritesController extends Controller
     {
         if ($id != '') {
             $favorite = $this->FavoritesModel->getOne($id);
-            $this->render('edit', ['favorite' => $favorite]);
+            $this->render('editFavorite', ['favorite' => $favorite]);
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $favorite = $this->FavoritesModel->editFavorite($_POST);
 

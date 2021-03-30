@@ -19,7 +19,7 @@
                 if (isset($_SESSION['username']) && $_SESSION['username'] != '') {
                     echo '<li><a href="/dashboard">Dashboard</a></li>';
                     echo '<li><a href="/users/logout">Se déconnecter</a></li>';
-                    echo '<li><a href="/users/profile">' . $_SESSION['username'] . '</a></li>';
+                    echo '<li><a href="/dashboard/profile/' . $_SESSION['userID'] . '">' . $_SESSION['username'] . '</a></li>';
                 } else {
                     echo '<li><a href="/">Accueil</a></li>';
                     echo '<li><a href="/users/login">Se connecter</a></li>';

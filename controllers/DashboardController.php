@@ -11,4 +11,14 @@ class DashboardController extends Controller
             $this->render('index', ['favorites' => $favorites]);
         }
     }
+    public function profile($id = '')
+    {
+        if (!isset($_SESSION['userID']) || $_SESSION['userID'] != $id) {
+            header('Location: /');
+        } else {
+            $this->loadmodel('UsersModel');
+            $data = $this->UsersModel->getOne($_SESSION['userID']);
+            $this->render('profile', $data);
+        }
+    }
 }
