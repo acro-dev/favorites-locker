@@ -13,7 +13,6 @@
         border-radius: 1rem;
     }
     input {
-        flex-grow: 1;
         margin-right: 2rem;
 
         line-height: 2rem;
@@ -23,10 +22,17 @@
         padding: 0.2rem 1rem;
         background-color: rgba(255, 255, 255, 0.7);
     }
+
+    #name {
+        width: 30%;
+    }
+    #url {
+        flex-grow: 1;
+    }
     button {
         font-size: 1.8rem;
         font-weight: lighter;
-        padding: 0.5rem 3rem;
+        padding: 0.5rem 2rem;
         border-radius: 20rem;
         outline: none;
         border: none;
@@ -50,9 +56,17 @@
 
     .link-item {
         display: flex;
+        align-items: center;
         padding: 0.5rem 0;
+        .name {
+            font-family: "Lobster";
+        }
         .url {
             flex-grow: 1;
+            a,
+            a:visited {
+                color: whitesmoke;
+            }
         }
         .delete {
             margin: 0 2rem;

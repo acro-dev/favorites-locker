@@ -16,11 +16,11 @@ class FavoritesModel extends Model
         return $query->fetchAll();
     }
 
-    public function addFavorite($url)
+    public function addFavorite($name, $url)
     {
-        $sql = 'INSERT INTO favorites (url,user_id) VALUES (?,?)';
+        $sql = 'INSERT INTO favorites (name,url,user_id) VALUES (?,?,?)';
         $stmt = $this->_connection->prepare($sql);
-        $stmt->execute([$url, $_SESSION['userID']]);
+        $stmt->execute([$name, $url, $_SESSION['userID']]);
     }
 
     public function editFavorite($data)

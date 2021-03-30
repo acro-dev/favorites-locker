@@ -35,15 +35,23 @@ header nav ul li a { color: white; font-size: 120%; }
 
 .quickAdd form input, .quickAdd form button { border-radius: 1rem; }
 
-.quickAdd form input { -webkit-box-flex: 1; -ms-flex-positive: 1; flex-grow: 1; margin-right: 2rem; line-height: 2rem; border: none; border-radius: 30px; outline: none; padding: 0.2rem 1rem; background-color: rgba(255, 255, 255, 0.7); }
+.quickAdd form input { margin-right: 2rem; line-height: 2rem; border: none; border-radius: 30px; outline: none; padding: 0.2rem 1rem; background-color: rgba(255, 255, 255, 0.7); }
 
-.quickAdd form button { font-size: 1.8rem; font-weight: lighter; padding: 0.5rem 3rem; border-radius: 20rem; outline: none; border: none; cursor: pointer; background-color: rgba(0, 0, 0, 0.5); color: white; font-family: "Lobster"; }
+.quickAdd form #name { width: 30%; }
+
+.quickAdd form #url { -webkit-box-flex: 1; -ms-flex-positive: 1; flex-grow: 1; }
+
+.quickAdd form button { font-size: 1.8rem; font-weight: lighter; padding: 0.5rem 2rem; border-radius: 20rem; outline: none; border: none; cursor: pointer; background-color: rgba(0, 0, 0, 0.5); color: white; font-family: "Lobster"; }
 
 .urlTable { font-size: 20px; -webkit-box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2); box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2); margin-top: 2rem; background-color: rgba(0, 0, 0, 0.3); border: 10px solid rgba(0, 0, 0, 0.5); border-radius: 30px; padding: 2rem; color: white; width: 50%; }
 
-.urlTable .link-item { display: -webkit-box; display: -ms-flexbox; display: flex; padding: 0.5rem 0; }
+.urlTable .link-item { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; padding: 0.5rem 0; }
+
+.urlTable .link-item .name { font-family: "Lobster"; }
 
 .urlTable .link-item .url { -webkit-box-flex: 1; -ms-flex-positive: 1; flex-grow: 1; }
+
+.urlTable .link-item .url a, .urlTable .link-item .url a:visited { color: whitesmoke; }
 
 .urlTable .link-item .delete { margin: 0 2rem; }
 /*# sourceMappingURL=style.min.css.map */
