@@ -1,34 +1,31 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username'])) {
-    header('Location: /dashboard.php');
-    exit;
+define('ROOT', str_replace('public/index.php', '', $_SERVER['SCRIPT_FILENAME']));
+
+require_once ROOT . '/app/Model.php';
+require_once ROOT . '/app/Controller.php';
+
+$params = explode('/', $_GET['p']);
+
+if ($params[0] != "") {
+    $controller = ucFirst($params[0]) . "Controller";
+
+    $action = (isset($params[1]) && !empty($params[1])) ? $params[1] : "index";
+
+    require_once ROOT . '/controllers/' . $controller . '.php';
+    $controller = new $controller;
+    if (method_exists($controller, $action)) {
+        unset($params[0]);
+        unset($params[1]);
+        call_user_func_array([$controller, $action], $params);
+        // $controller->$action();
+    } else {
+        http_response_code(404);
+        echo "La page demandé n'existe pas !";
+    }
+} else {
+    require_once ROOT . 'controllers/DefaultController.php';
+    $DefaultController = new DefaultController;
+    $DefaultController->index();
 }
-
-require '../templates/header.php'; ?>
-<main>
-    <h1>Bienvenue sur Favorites Locker</h1>
-
-    <p>
-        Si vous avez besoin d'un gestionnaire de favoris en ligne,
-        vous êtes au bon endroit !
-    </p>
-    <p>
-        Favorites-locker va vous permettre d'enregister et de classer les liens
-        vers vos sites favoris.
-    </p>
-    <p>
-        Ainsi vous y aurait accès à partir de n'importe quel navigateur web :)
-    </p>
-</main>
-<section>
-    <p>
-        Si vous avez déjà un compte, <a href="#">connectez-vous</a>.
-    </p>
-    <p>
-        Sinon c'est par ici pour vous enregister => <a href="#">créer un compte</a> !
-    </p>
-
-
-    <?php require '../templates/footer.php'; ?>
