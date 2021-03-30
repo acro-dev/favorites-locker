@@ -2,12 +2,15 @@
 
 class FavoritesController extends Controller
 {
+    public function __construct()
+    {
+        $this->loadmodel('FavoritesModel');
+    }
+
     public function index()
     {
         if (isset($_SESSION['userID']) && $_SESSION['userID'] != "") {
 
-
-            $this->loadmodel("FavoritesModel");
             $favorites = $this->FavoritesModel->findByUserId($_SESSION['userID']);
 
             $this->render('index', ['favorites' => $favorites]);
@@ -16,6 +19,7 @@ class FavoritesController extends Controller
             exit;
         }
     }
+
     public function addFavorite()
     {
         if (isset($_POST['url']) && $_POST['url'] != "") {
@@ -30,7 +34,6 @@ class FavoritesController extends Controller
             $name = htmlspecialchars($name);
             $name = ucfirst($name);
 
-            $this->loadmodel('FavoritesModel');
             $this->FavoritesModel->addFavorite($name, $url);
 
             header('Location: /');
@@ -39,20 +42,16 @@ class FavoritesController extends Controller
 
     public function deleteFavorite($id)
     {
-        $this->loadmodel('FavoritesModel');
         $this->FavoritesModel->removeById($id);
-
         header('Location: /');
     }
 
     public function editFavorite($id = '')
     {
         if ($id != '') {
-            $this->loadmodel('FavoritesModel');
             $favorite = $this->FavoritesModel->getOne($id);
             $this->render('edit', ['favorite' => $favorite]);
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->loadmodel('FavoritesModel');
             $favorite = $this->FavoritesModel->editFavorite($_POST);
 
             header('Location: /');
