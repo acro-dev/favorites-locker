@@ -15,10 +15,7 @@ class UsersModel extends Model
 
     public function login($email, $password)
     {
-        $sql = "SELECT * FROM " . $this->table . " WHERE email='" . $email . "'";
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
-        $data = $query->fetch();
+        $data = $this->checkEmail($email);
 
         if (!empty($data)) {
             $hash = $data['password'];
@@ -38,6 +35,17 @@ class UsersModel extends Model
 
         $sql = 'INSERT INTO ' . $this->table . ' (username,email,password) VALUES (?,?,?)';
         $query = $this->_connection->prepare($sql);
-        $query->execute($this->username, $this->email, $this->password);
+        $createUser = $query->execute([$this->username, $this->email, $this->password]);
+
+        return $createUser;
+    }
+
+    public function checkEmail($email)
+    {
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE email="' . $email . '"';
+        $query = $this->_connection->prepare($sql);
+        $query->execute();
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+        return $data;
     }
 }

@@ -1,10 +1,83 @@
 <?php
+
 class UsersController extends Controller
 {
     public function __construct()
     {
         $this->loadmodel('UsersModel');
     }
+
+    public function signup()
+    {
+        $data = [
+            'title' => 'Login page',
+            'username' => '',
+            'email' => '',
+            'password' => '',
+            'confirmPassword' => '',
+            'usernameError' => '',
+            'emailError' => '',
+            'passwordError' => ''
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $data = [
+                'username' => trim($_POST['username']),
+                'email' => trim($_POST['email']),
+                'password' => trim($_POST['password']),
+                'confirmPassword' => trim($_POST['confirmPassword']),
+                'usernameError' => '',
+                'emailError' => '',
+                'passwordError' => ''
+            ];
+
+            /**
+             * Username can be not unique but must be not empty
+             */
+            if (empty($data['username'])) {
+                $data['usernameError'] = "Votre nom d'utilisateur doit être renseigné.";
+            }
+            /**
+             * Email must match pattern. And must be unique.
+             */
+            if (empty($data['email'])) {
+                $data['emailError'] = "L'adresse email doit être renseigné.";
+            } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $data['emailError'] = "Adresse email non valide.";
+            } else if ($this->UsersModel->checkEmail($data['email']) !== false) {
+                $data['emailError'] = "Cette adresse mail est déjà utilisée.";
+            }
+
+            /**
+             * Password must be at least 6 characters long and match confirmPassword.
+             */
+
+            if (empty($data['password'])) {
+                $data['passwordError'] = "Password vide.";
+            } else if (strlen($data['password']) < 6) {
+                $data['passwordError'] = "Votre mot de passe doit contenir au moins 6 caractères.";
+            } else if ($data['password'] != $data['confirmPassword']) {
+                $data['passwordError'] = "Vos mots de passe ne correspondents pas.";
+            } else {
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }
+
+            if (empty($data['usernameError']) && empty($data['emailError']) && empty($data['passwordError'])) {
+                $createUser = $this->UsersModel->signup($data);
+
+                if ($createUser) {
+                    header('Location: /users/login');
+                } else {
+                    echo "Une érreur s'est produite lors de l'inscription. Veuillez reéssayer s'il vous plait.";
+                }
+            }
+        }
+
+        $this->render('signup', $data);
+    }
+
     public function login()
     {
         $data = [

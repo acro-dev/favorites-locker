@@ -7,13 +7,13 @@ class FavoritesModel extends Model
         $this->table = "favorites";
         $this->getConnection();
     }
-    public function findByUserId()
+    public function findAllByUserId()
     {
         $sql = "SELECT * FROM " . $this->table . " WHERE user_id=" . $_SESSION['userID'];
         $query = $this->_connection->prepare($sql);
         $query->execute();
 
-        return $query->fetchAll();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addFavorite($name, $url)

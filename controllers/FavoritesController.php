@@ -7,32 +7,16 @@ class FavoritesController extends Controller
         $this->loadmodel('FavoritesModel');
     }
 
-    public function index()
-    {
-        if (isset($_SESSION['userID']) && $_SESSION['userID'] != "") {
-
-            $favorites = $this->FavoritesModel->findByUserId($_SESSION['userID']);
-
-            $this->render('index', ['favorites' => $favorites]);
-        } else {
-            header('Location: /');
-            exit;
-        }
-    }
-
     public function addFavorite()
     {
-        if (isset($_POST['url']) && $_POST['url'] != "") {
-            $url = trim($_POST['url']);
-            $url = htmlspecialchars($url);
-            $url = strtolower($url);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $url = strtolower($_POST['url']);
             if (preg_match('/(http:\/\/)|(https:\/\/)/A', $url) == 0) {
                 $url = 'http://' . $url;
             }
-
-            $name = trim($_POST['name']);
-            $name = htmlspecialchars($name);
-            $name = ucfirst($name);
+            $name = ucfirst(strtolower($_POST['name']));
 
             $this->FavoritesModel->addFavorite($name, $url);
 

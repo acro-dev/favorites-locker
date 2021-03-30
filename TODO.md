@@ -24,11 +24,10 @@
 - [ ] Username lost feature.
 
 ## Signup form:
-- [ ] HTML/CSS Form.
+- [x] HTML/CSS Form.
 - [x] Validation of data.
-    - [x] Unique username.
     - [x] Unique email && looks like an email.
-    - [x] password have at least 8 caracteres.
+    - [x] password have at least 6 caracteres.
     - [x] password confirmation is the same than password.
 - [x] Database registration.
     - [ ] Set session.
@@ -46,9 +45,9 @@
         - [ ] Maximum size.
         - [ ] Maximum weight.
 - [x] Remove fav function.
-- [ ] Modify favorite.
-    - [ ] Change name.
-    - [ ] Change url.
+- [x] Modify favorite.
+    - [x] Change name.
+    - [x] Change url.
     - [ ] Change icon.
     - [ ] Change catergory.
 - [ ] Sort fav:
