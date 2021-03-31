@@ -18,4 +18,10 @@ abstract class Controller
         $content = ob_get_clean();
         require_once(ROOT . 'views/layout/default.php');
     }
+
+    public function goHome()
+    {
+        header('location: /');
+        exit;
+    }
 }
