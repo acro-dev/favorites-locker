@@ -33,7 +33,6 @@
         <?= $content ?>
     </div>
     <!-- Script js -->
-    <!-- <?php var_dump($_SESSION); ?> -->
     <script src="dist/js/app.js"></script>
 </body>
 

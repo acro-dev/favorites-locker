@@ -60,10 +60,10 @@
 
 ## Profile page:
 - [x] Change username.
-    - [ ] Verify unicity.
+    - [x] Verify unicity.
     - [x] Put change in database.
 - [x] Change email.
-    - [ ] Verify if email is valid.
+    - [x] Verify if email is valid.
     - [x] Put change in database.
 - [ ] Change password.
     - [ ] Check if password is valid.

@@ -7,10 +7,57 @@ class UsersController extends Controller
         $this->loadmodel('UsersModel');
     }
 
+    public function verifyUsername($username)
+    {
+        /**
+         * Username must not be empty.
+         * Must contain only letters and numbers.
+         */
+        if (empty($username)) {
+            return "Votre nom d'utilisateur doit être renseigné.";
+        } else if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+            return "Votre nom d'utilisateur ne peut contenir que des lettres ou des chiffres.";
+        } else {
+            return '';
+        }
+    }
+
+    public function verifyEmail($email)
+    {
+        /**
+         * Email must match pattern. And must be unique.
+         */
+        if (empty($email)) {
+            return "L'adresse email doit être renseigné.";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "Adresse email non valide.";
+        } else if ($this->UsersModel->checkEmail($email) !== false) {
+            return "Cette adresse mail est déjà utilisée.";
+        } else {
+            return '';
+        }
+    }
+
+    public function verifyPassword($password, $confirmPassword = '')
+    {
+        /**
+         * Password must be at least 6 characters long,
+         * Must match with confim password.
+         */
+        if (empty($password)) {
+            return "Password vide.";
+        } else if (strlen($password) < 6) {
+            return "Votre mot de passe doit contenir au moins 6 caractères.";
+        } else if ($password != $confirmPassword) {
+            return "Vos mots de passe ne correspondents pas.";
+        } else {
+            return '';
+        }
+    }
+
     public function signup()
     {
         $data = [
-            'title' => 'Login page',
             'username' => '',
             'email' => '',
             'password' => '',
@@ -33,41 +80,15 @@ class UsersController extends Controller
                 'passwordError' => ''
             ];
 
-            /**
-             * Username can be not unique but must be not empty
-             */
-            if (empty($data['username'])) {
-                $data['usernameError'] = "Votre nom d'utilisateur doit être renseigné.";
-            }
-            /**
-             * Email must match pattern. And must be unique.
-             */
-            if (empty($data['email'])) {
-                $data['emailError'] = "L'adresse email doit être renseigné.";
-            } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $data['emailError'] = "Adresse email non valide.";
-            } else if ($this->UsersModel->checkEmail($data['email']) !== false) {
-                $data['emailError'] = "Cette adresse mail est déjà utilisée.";
-            }
-
-            /**
-             * Password must be at least 6 characters long and match confirmPassword.
-             */
-
-            if (empty($data['password'])) {
-                $data['passwordError'] = "Password vide.";
-            } else if (strlen($data['password']) < 6) {
-                $data['passwordError'] = "Votre mot de passe doit contenir au moins 6 caractères.";
-            } else if ($data['password'] != $data['confirmPassword']) {
-                $data['passwordError'] = "Vos mots de passe ne correspondents pas.";
-            } else {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            }
+            $data['usernameError'] = $this->verifyUsername($data['username']);
+            $data['emailError'] = $this->verifyEmail($data['email']);
+            $data['passwordError'] = $this->verifyPassword($data['password'], $data['confirmPassword']);
 
             /**
              * If no error : Create user in database.
              */
             if (empty($data['usernameError']) && empty($data['emailError']) && empty($data['passwordError'])) {
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
                 $createUser = $this->UsersModel->signup($data);
 
                 if ($createUser) {
@@ -84,9 +105,6 @@ class UsersController extends Controller
     public function login()
     {
         $data = [
-            'title' => 'Login page',
-            'email' => '',
-            'password' => '',
             'emailError' => '',
             'passwordError' => ''
         ];
@@ -113,9 +131,7 @@ class UsersController extends Controller
 
                 if ($loggedInUser) {
                     $this->createSession($loggedInUser);
-
-                    header('Location: /');
-                    exit();
+                    $this->goHome();
                 } else {
                     $data['passwordError'] = 'Email or password was wrong';
                 }
@@ -139,33 +155,54 @@ class UsersController extends Controller
         session_unset();
         session_destroy();
 
-        header('Location: /');
-        exit();
-    }
+        $this->goHome();
 
-    public function editEmail($id)
-    {
-        $data = $this->UsersModel->getOne($id);
-        $this->render('editProfile', $data);
+        exit();
     }
 
     public function editProfile($property)
     {
+        $error = '';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             $newValue = $_POST[$property];
-            $id = $_POST['id'];
-            $this->UsersModel->updateUser($property, $newValue, $id);
-            $user = $this->UsersModel->getOne($id);
-            $this->createSession($user);
 
+            switch ($property) {
+                case 'email':
+                    $error = $this->verifyEmail($newValue);
+                    break;
 
-            header('Location: /dashboard/profile/' . $id);
-        } else {
-            $data = $this->UsersModel->getOne($_SESSION['userID']);
-            $data['property'] = $property;
+                case 'username':
+                    $error = $this->verifyUsername($newValue);
+                    break;
+            }
 
-            $this->render('editProfile', $data);
+            if (empty($error)) {
+
+                $id = $_POST['id'];
+
+                $this->UsersModel->updateUser($property, $newValue, $id);
+
+                $user = $this->UsersModel->getOne($id);
+                $this->createSession($user);
+
+                header('Location: /dashboard/profile/' . $id);
+            }
         }
+
+        $data = $this->UsersModel->getOne($_SESSION['userID']);
+        $data['property'] = $property;
+        switch ($property) {
+            case 'email':
+                $data['propertyName'] = "e-mail";
+                break;
+            case 'username':
+                $data['propertyName'] = "nom d'utilisateur";
+                break;
+        }
+
+        $data['error'] = $error;
+
+        $this->render('editProfile', $data);
     }
 }

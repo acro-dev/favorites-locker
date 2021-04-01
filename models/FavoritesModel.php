@@ -2,6 +2,11 @@
 
 class FavoritesModel extends Model
 {
+    public $id;
+    public $name;
+    public $url;
+    public $catergory;
+
     public function __construct()
     {
         $this->table = "favorites";
@@ -16,16 +21,16 @@ class FavoritesModel extends Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addFavorite($name, $url)
+    public function addFavorite()
     {
         $sql = 'INSERT INTO favorites (name,url,user_id) VALUES (?,?,?)';
         $stmt = $this->_connection->prepare($sql);
-        $stmt->execute([$name, $url, $_SESSION['userID']]);
+        $stmt->execute([$this->name, $this->url, $_SESSION['userID']]);
     }
 
-    public function editFavorite($data)
+    public function editFavorite()
     {
-        $sql = 'UPDATE ' . $this->table . ' SET name="' . $data['name'] . '", url="' . $data['url'] . '" WHERE id=' . $data['id'];
+        $sql = 'UPDATE ' . $this->table . ' SET name="' . $this->name . '", url="' . $this->url . '" WHERE id=' . $this->id;
         $stmt = $this->_connection->prepare($sql);
         $stmt->execute();
     }

@@ -1,7 +1,3 @@
-<?php
-var_dump($data);
-?>
-
 <h1>Profile</h1>
 <div>
     Nom d'utilisateur : <?= ucfirst($data['username']); ?>

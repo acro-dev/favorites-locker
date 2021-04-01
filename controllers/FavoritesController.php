@@ -7,27 +7,33 @@ class FavoritesController extends Controller
         $this->loadmodel('FavoritesModel');
     }
 
+    public function verifyUrl($url)
+    {
+        if (preg_match('/(http:\/\/)|(https:\/\/)/A', $url) == 0) {
+            $url = 'http://' . $url;
+        }
+
+        return $url;
+    }
+
     public function addFavorite()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-            $url = strtolower($_POST['url']);
-            if (preg_match('/(http:\/\/)|(https:\/\/)/A', $url) == 0) {
-                $url = 'http://' . $url;
-            }
-            $name = ucfirst(strtolower($_POST['name']));
+            $this->FavoritesModel->url = $this->verifyUrl(strtolower($_POST['url']));
+            $this->FavoritesModel->name = ucfirst(strtolower($_POST['name']));
 
-            $this->FavoritesModel->addFavorite($name, $url);
+            $this->FavoritesModel->addFavorite();
 
-            header('Location: /');
+            $this->goHome();
         }
     }
 
     public function deleteFavorite($id)
     {
         $this->FavoritesModel->removeById($id);
-        header('Location: /');
+        $this->goHome();
     }
 
     public function editFavorite($id = '')
@@ -36,9 +42,12 @@ class FavoritesController extends Controller
             $favorite = $this->FavoritesModel->getOne($id);
             $this->render('editFavorite', ['favorite' => $favorite]);
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $favorite = $this->FavoritesModel->editFavorite($_POST);
+            $this->FavoritesModel->id = $_POST['id'];
+            $this->FavoritesModel->name = $_POST['name'];
+            $this->FavoritesModel->url = $this->verifyUrl($_POST['url']);
+            $this->FavoritesModel->editFavorite();
 
-            header('Location: /');
+            $this->goHome();
         }
     }
 }
