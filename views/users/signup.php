@@ -1,23 +1,33 @@
-<div class="login">
+<div class="row">
+    <div class="col col-lg-6 col-md-8 m-auto">
 
-    <h1>S'inscrire</h1>
+        <h1 class="text-center">S'inscrire</h1>
 
-    <form action="/users/signup" method="POST">
-        <label for="username">Nom d'utilisateur</label>
-        <input type="text" id="username" name="username" value="<?= $data['username'] ?>">
-        <span><?php echo $data['usernameError']; ?></span>
+        <form action=" /users/signup" method="POST">
+            <div class="mb-3">
+                <label class="form-label" for="username">Nom d'utilisateur</label>
+                <input class="form-control" type="text" id="username" name="username" value="<?= $data['username'] ?>">
+                <span class="form-text text-danger"><?php echo $data['usernameError']; ?></span>
+            </div>
 
-        <label for="email">E-Mail</label>
-        <input type="text" id="email" name="email" value="<?= $data['email'] ?>">
-        <span><?php echo $data['emailError']; ?></span>
+            <div class="mb-3">
+                <label class="form-label" for="email">E-Mail</label>
+                <input class="form-control" type="text" id="email" name="email" value="<?= $data['email'] ?>">
+                <span class="form-text text-danger"><?php echo $data['emailError']; ?></span>
+            </div>
 
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password">
-        <span><?php echo $data['passwordError']; ?></span>
+            <div class="mb-3">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input class="form-control" type="password" id="password" name="password">
+                <span class="form-text text-danger"><?php echo $data['passwordError']; ?></span>
+            </div>
 
-        <label for="confirmPassword">Confirmer votre mot de passe</label>
-        <input type="password" id="confirmPassword" name="confirmPassword">
+            <div class="mb-3">
+                <label class="form-label" for="confirmPassword">Confirmer votre mot de passe</label>
+                <input class="form-control" type="password" id="confirmPassword" name="confirmPassword">
+            </div>
 
-        <button type="submit">Incription</button>
-    </form>
+            <button class="btn btn-primary" type="submit">Incription</button>
+        </form>
+    </div>
 </div>
