@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&family=Lobster+Two&display=swap");
-h1 { font-family: "Lobster"; font-weight: lighter; font-size: 3rem; margin-bottom: 2.5rem; text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2); }
+.navbar-brand { font-family: "Lobster"; font-size: 2rem; }
+
+h1 { font-family: "Lobster"; font-weight: lighter; font-size: 3rem; margin-bottom: 2.5rem; }
 
 h2 { margin-bottom: 2rem; }
 /*# sourceMappingURL=style.min.css.map */

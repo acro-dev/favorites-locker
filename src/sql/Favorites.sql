@@ -8,6 +8,5 @@ CREATE TABLE favorites (
     user_id INT,
     category_id INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (category_id) REFERENCES catergories (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE = INNODB;

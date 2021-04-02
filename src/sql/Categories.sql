@@ -1,4 +1,4 @@
-CREATE TABLE catergories (
+CREATE TABLE categories (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(100) NOT NULL UNIQUE,
     PRIMARY KEY (id)

@@ -8,8 +8,7 @@ abstract class Model
 
     protected $_connection;
 
-    public $table;
-    public $id;
+    private $table;
 
     public function getConnection()
     {
@@ -28,7 +27,7 @@ abstract class Model
 
     public function getAll()
     {
-        $sql = "SELECT * FROM " . $this->table;
+        $sql = "SELECT * FROM " . $this->getTable();
         $query = $this->_connection->prepare($sql);
 
         $query->execute();
@@ -36,16 +35,35 @@ abstract class Model
     }
     public function getOne($id)
     {
-        $sql = "SELECT * FROM " . $this->table . " WHERE id=" . $id;
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
+        $sql = "SELECT * FROM " . $this->getTable() . " WHERE id=" . $id;
+        $query = $this->_connection->exec($sql);
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public function removeById($id)
     {
-        $sql = 'DELETE FROM ' . $this->table . ' WHERE id=' . $id;
+        $sql = 'DELETE FROM ' . $this->getTable() . ' WHERE id=' . $id;
         $this->_connection->exec($sql);
+    }
+
+    /**
+     * Get the value of table
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * Set the value of table
+     *
+     * @return  self
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
+
+        return $this;
     }
 }

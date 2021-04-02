@@ -8,10 +8,10 @@ class DashboardController extends Controller
             $this->goHome();
         }
     }
-    public function index()
+    public function index($order = 'name')
     {
         $this->loadmodel("FavoritesModel");
-        $favorites = $this->FavoritesModel->findAllByUserId($_SESSION['userID']);
+        $favorites = $this->FavoritesModel->findAllByUserId($order);
 
         $this->render('index', ['favorites' => $favorites]);
     }
