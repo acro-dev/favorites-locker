@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap");
+:root {
+    --primary-color: #00b144;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 100%;
+    font-family: "Montserrat", sans-serif;
+}
+
+.dashboard {
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.content {
+    padding: 3rem 5rem; /* h / w */
+}
+.sideMenu {
+    padding: 1rem 2rem; /* h / w */
+}
+
+/**
+  * Side Menu
+  */
+
+.sideMenu {
+    background-color: black;
+    color: white;
+}
+.sideMenu h2 {
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 4rem;
+    margin-bottom: 6rem;
+    font-family: "Lobster Two", cursive;
+}
+
+.sideMenu h2::before,
+.sideMenu h2::after {
+    content: "/";
+    color: var(--primary-color);
+    font-weight: bold;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+.sideMenu h2::before {
+    margin-right: 1rem;
+}
+.sideMenu h2::after {
+    margin-left: 1rem;
+}
+
+.sideMenu ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 5rem;
+}
+
+.sideMenu ul:last-child {
+    margin-bottom: 0;
+}
+
+.sideMenu ul li {
+    margin-bottom: 0.5rem;
+}
+.sideMenu ul li:last-child {
+    margin-bottom: 0;
+}
+
+#myFavoriteTitle::before {
+    content: "📄";
+    margin-right: 1rem;
+}
+
+#profileTitle::before {
+    content: "😶";
+    margin-right: 1rem;
+}
+.content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+/**
+  * Category table
+  */
+
+.category {
+    width: 30%;
+}
+
+.fav-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid gray;
+}
+
+.fav-item .fav-link {
+    flex-grow: 1;
+}
+.fav-item .fav-delete {
+    margin: 0 2rem;
+}
+
+@media screen and (max-width: 1600px) {
+    .category {
+        width: 45%;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .category {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .sideMenu {
+        display: none;
+    }
+}
