@@ -8,7 +8,7 @@ abstract class Model
 
     protected $_connection;
 
-    private $table;
+    protected $table;
 
     public function getConnection()
     {

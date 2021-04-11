@@ -44,7 +44,7 @@ class FavoritesModel extends Model
     {
         $sql = 'INSERT INTO favorites (name,url,user_id) VALUES (?,?,?)';
         $stmt = $this->_connection->prepare($sql);
-        $stmt->execute([$this->name, $this->url, $_SESSION['userID']]);
+        $stmt->execute([$this->getName(), $this->getUrl(), $_SESSION['userID']]);
     }
 
     public function editFavorite()
@@ -186,6 +186,18 @@ class FavoritesModel extends Model
     public function setCategory_id($category_id)
     {
         $this->category_id = $category_id;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

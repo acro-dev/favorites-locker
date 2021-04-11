@@ -21,8 +21,8 @@ class FavoritesController extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-            $this->FavoritesModel->url = $this->verifyUrl(strtolower($_POST['url']));
-            $this->FavoritesModel->name = ucfirst(strtolower($_POST['name']));
+            $this->FavoritesModel->setUrl($this->verifyUrl(strtolower($_POST['fav-url'])));
+            $this->FavoritesModel->setName(ucfirst(strtolower($_POST['fav-name'])));
 
             $this->FavoritesModel->addFavorite();
 
@@ -42,18 +42,17 @@ class FavoritesController extends Controller
             $favorite = $this->FavoritesModel->findOneById($id);
             $this->render('editFavorite', ['favorite' => $favorite]);
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->FavoritesModel->id = $_POST['id'];
-            $this->FavoritesModel->name = $_POST['name'];
-            $this->FavoritesModel->url = $this->verifyUrl($_POST['url']);
+            $this->FavoritesModel->setId($_POST['id']);
+            $this->FavoritesModel->setName($_POST['name']);
+            $this->FavoritesModel->setUrl($this->verifyUrl($_POST['url']));
             $category = $_POST['category'];
             $this->loadmodel('CategoriesModel');
             $existingCategory = $this->CategoriesModel->findCategory($category);
             if ($category == $existingCategory['name']) {
-                $this->FavoritesModel->category_id = $existingCategory['id'];
+                $this->FavoritesModel->setCategory_id($existingCategory['id']);
             } else {
-                $this->FavoritesModel->category_id = NULL;
+                $this->FavoritesModel->setCategory_id(NULL);
             }
-            var_dump($this->FavoritesModel);
             $this->FavoritesModel->editFavorite();
 
             $this->goHome();
