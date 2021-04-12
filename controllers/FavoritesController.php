@@ -1,5 +1,9 @@
 <?php
 
+namespace Controllers;
+
+use App\Controller;
+
 class FavoritesController extends Controller
 {
     public function __construct()

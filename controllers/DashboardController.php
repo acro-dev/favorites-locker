@@ -1,5 +1,9 @@
 <?php
 
+namespace Controllers;
+
+use App\Controller;
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -20,7 +24,6 @@ class DashboardController extends Controller
         $favorites = $this->FavoritesModel->findAllByUserId($order);
 
         $this->render('dashboard', ['favorites' => $favorites]);
-        var_dump($_COOKIE);
     }
     public function profile()
     {
@@ -28,16 +31,7 @@ class DashboardController extends Controller
         $data = $this->UsersModel->getOne($_SESSION['userID']);
         $this->render('profile', $data);
     }
-    public function render($file, $data = [])
-    {
-        $controller = str_replace('Controller', '', get_class($this));
 
-        extract($data);
-        ob_start();
-        require_once(ROOT . 'views/' . strtolower($controller) . '/' . $file . '.php');
-        $content = ob_get_clean();
-        require_once(ROOT . 'views/layout/dashboard.php');
-    }
     public function sortFav($filter = "name")
     {
         $name = 'sort_fav-' . $_SESSION['userID'];

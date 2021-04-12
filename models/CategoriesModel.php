@@ -1,5 +1,10 @@
 <?php
 
+namespace Models;
+
+use App\Model;
+use PDO;
+
 class CategoriesModel extends Model
 {
     public $id;

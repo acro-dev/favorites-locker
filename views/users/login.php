@@ -3,7 +3,7 @@
 
         <main>
             <h1 class="text-center">Se connecter</h1>
-            <form action="/users/login" method="POST">
+            <form action="/login" method="POST">
                 <div class="mb-3">
                     <label class="form-label" for="email">E-Mail</label>
                     <input class="form-control" type="text" id="email" name="email">

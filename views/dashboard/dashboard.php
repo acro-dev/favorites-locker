@@ -11,8 +11,17 @@ foreach ($data['favorites'] as $fav) {
   }
 }
 sort($listCategory);
+?>
 
+<div class="quickAdd">
+  <form autocomplete="off" action="favorites/addFavorite" method="POST">
+    <input type="text" name="fav-name" id="qa-fav-name" placeholder="Nom du favori" />
+    <input type="text" name="fav-url" id="qa-fav-url" placeholder="Url du favori" />
+    <input type="submit" value="+" />
+  </form>
+</div>
 
+<?php
 if ($_COOKIE['sort_fav-' . $_SESSION['userID']] === "category") {
   require_once '../views/dashboard/sortByCategory.php';
 } else {

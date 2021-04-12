@@ -1,5 +1,10 @@
 <?php
 
+namespace Models;
+
+use App\Model;
+use PDO;
+
 class UsersModel extends Model
 {
     protected $id;

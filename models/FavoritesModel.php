@@ -1,5 +1,10 @@
 <?php
 
+namespace Models;
+
+use App\Model;
+use PDO;
+
 class FavoritesModel extends Model
 {
     private $id;

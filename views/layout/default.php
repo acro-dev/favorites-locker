@@ -16,9 +16,9 @@
 
 <body>
     <header class="mb-5">
-        <nav class="navbar-expand-lg navbar navbar-dark bg-primary">
+        <nav class="navbar-expand-lg navbar navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Favorites-Locker</a>
+                <a class="navbar-brand title" href="#">Favorites-Locker</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -27,12 +27,12 @@
                         <?php
                         if (isset($_SESSION['username']) && $_SESSION['username'] != '') {
                             echo '<li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>';
-                            echo '<li class="nav-item"><a class="nav-link" href="/users/logout">Se déconnecter</a></li>';
+                            echo '<li class="nav-item"><a class="nav-link" href="/logout">Se déconnecter</a></li>';
                             echo '<li class="nav-item"><a class="nav-link" href="/dashboard/profile/' . $_SESSION['userID'] . '">' . $_SESSION['username'] . '</a></li>';
                         } else {
                             echo '<li class="nav-item"><a class="nav-link" href="/">Accueil</a></li>';
-                            echo '<li class="nav-item"><a class="nav-link" href="/users/login">Se connecter</a></li>';
-                            echo '<li class="nav-item"><a class="nav-link" href="/users/signup">S\'inscire</a></li>';
+                            echo '<li class="nav-item"><a class="nav-link" href="/login">Se connecter</a></li>';
+                            echo '<li class="nav-item"><a class="nav-link" href="/signup">S\'inscire</a></li>';
                         }
                         ?>
                     </ul>

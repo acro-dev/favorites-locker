@@ -1,5 +1,9 @@
 <?php
 
+namespace Controllers;
+
+use App\Controller;
+
 class UsersController extends Controller
 {
     public function __construct()
@@ -160,49 +164,49 @@ class UsersController extends Controller
         exit();
     }
 
-    public function editProfile($property)
+    public function editProfile($params)
     {
-        $error = '';
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $newValue = $_POST[$property];
+        // $error = '';
+        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //     $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        //     $newValue = $_POST[$property];
 
-            switch ($property) {
-                case 'email':
-                    $error = $this->verifyEmail($newValue);
-                    break;
+        //     switch ($property) {
+        //         case 'email':
+        //             $error = $this->verifyEmail($newValue);
+        //             break;
 
-                case 'username':
-                    $error = $this->verifyUsername($newValue);
-                    break;
-            }
+        //         case 'username':
+        //             $error = $this->verifyUsername($newValue);
+        //             break;
+        //     }
 
-            if (empty($error)) {
+        //     if (empty($error)) {
 
-                $id = $_POST['id'];
+        //         $id = $_POST['id'];
 
-                $this->UsersModel->updateUser($property, $newValue, $id);
+        //         $this->UsersModel->updateUser($property, $newValue, $id);
 
-                $user = $this->UsersModel->getOne($id);
-                $this->createSession($user);
+        //         $user = $this->UsersModel->getOne($id);
+        //         $this->createSession($user);
 
-                header('Location: /dashboard/profile/' . $id);
-            }
-        }
+        //         header('Location: /dashboard/profile/' . $id);
+        //     }
+        // }
 
-        $data = $this->UsersModel->getOne($_SESSION['userID']);
-        $data['property'] = $property;
-        switch ($property) {
-            case 'email':
-                $data['propertyName'] = "e-mail";
-                break;
-            case 'username':
-                $data['propertyName'] = "nom d'utilisateur";
-                break;
-        }
+        // $data = $this->UsersModel->getOne($_SESSION['userID']);
+        // $data['property'] = $property;
+        // switch ($property) {
+        //     case 'email':
+        //         $data['propertyName'] = "e-mail";
+        //         break;
+        //     case 'username':
+        //         $data['propertyName'] = "nom d'utilisateur";
+        //         break;
+        // }
 
-        $data['error'] = $error;
+        // $data['error'] = $error;
 
-        $this->render('editProfile', $data);
+        $this->render('editProfile');
     }
 }

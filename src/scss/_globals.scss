@@ -1,22 +1,36 @@
 .navbar-brand {
-    font-family: "Lobster";
-    font-size: 2rem;
+  font-family: "Lobster";
+  font-size: 2rem;
 }
 
 h1 {
-    font-family: "Lobster";
-    font-weight: lighter;
-    font-size: 3rem;
+  font-family: "Lobster";
+  font-weight: lighter;
+  font-size: 3rem;
 
-    margin-bottom: 2.5rem;
-    // text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2.5rem;
+  // text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 a {
-    color: var(--primary-color);
-    text-decoration: none;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.title::before,
+.title::after {
+  content: "/";
+  color: var(--primary-color);
+  font-weight: bold;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+.navbar-brand::before {
+  margin-right: 1rem;
+}
+.navbar-brand::after {
+  margin-left: 1rem;
 }

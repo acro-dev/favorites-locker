@@ -15,9 +15,9 @@
 </main>
 <section>
     <p>
-        Si vous avez déjà un compte, <a href="#">connectez-vous</a>.
+        Si vous avez déjà un compte, <a href="/login">connectez-vous</a>.
     </p>
     <p>
-        Sinon c'est par ici pour vous enregister => <a href="#">créer un compte</a> !
+        Sinon c'est par ici pour vous enregister => <a href="/signup">créer un compte</a> !
     </p>
 </section>

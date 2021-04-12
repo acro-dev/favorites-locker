@@ -1,31 +1,34 @@
 <?php
 session_start();
+require_once '../vendor/autoload.php';
 
-define('ROOT', str_replace('public/index.php', '', $_SERVER['SCRIPT_FILENAME']));
+$router = new AltoRouter();
 
-require_once ROOT . '/app/Model.php';
-require_once ROOT . '/app/Controller.php';
+$router->map('GET', '/', 'DefaultController#index');
 
-$params = explode('/', $_GET['p']);
+// map users details page using controller#action string
+$router->map('GET', '/users/[i:id]', 'UsersController#editProfile');
+$router->map('GET|POST', '/login', 'UsersController#login');
+$router->map('GET|POST', '/signup', 'UsersController#signup');
+$router->map('GET', '/logout', 'UsersController#logout');
 
-if ($params[0] != "") {
-    $controller = ucFirst($params[0]) . "Controller";
+// map dashboard
+$router->map('GET', '/dashboard', 'DashboardController#index');
 
-    $action = (isset($params[1]) && !empty($params[1])) ? $params[1] : "index";
+$match = $router->match();
 
-    require_once ROOT . '/controllers/' . $controller . '.php';
-    $controller = new $controller;
-    if (method_exists($controller, $action)) {
-        unset($params[0]);
-        unset($params[1]);
-        call_user_func_array([$controller, $action], $params);
-        // $controller->$action();
+if (is_array($match)) {
+
+    $requestedAction = explode('#', $match['target']);
+    $requestedAction[0] = 'Controllers\\' . $requestedAction[0];
+    $action = $requestedAction[1];
+    $controller = new $requestedAction[0];
+    if (empty($match['params'])) {
+        $controller->$action();
     } else {
-        http_response_code(404);
-        echo "La page demandé n'existe pas !";
+        $controller->$action($match['params']);
     }
 } else {
-    require_once ROOT . 'controllers/DefaultController.php';
-    $DefaultController = new DefaultController;
-    $DefaultController->index();
+    // no route was matched
+    header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
 }
