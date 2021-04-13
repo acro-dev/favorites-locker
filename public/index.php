@@ -1,6 +1,8 @@
 <?php
+
 session_start();
 require_once '../vendor/autoload.php';
+require_once '../app/functions.php';
 
 $router = new AltoRouter();
 
@@ -13,7 +15,15 @@ $router->map('GET|POST', '/signup', 'UsersController#signup');
 $router->map('GET', '/logout', 'UsersController#logout');
 
 // map dashboard
-$router->map('GET', '/dashboard', 'DashboardController#index');
+$router->map('GET|POST', '/dashboard', 'DashboardController#index');
+$router->map('GET', '/dashboard/sort-by/[a:sortBy]?', 'DashboardController#index');
+$router->map('GET', '/dashboard/show-category/[a:category]?', 'DashboardController#showCategory');
+
+// map favorites actions
+$router->map('POST', '/favorites/addFavorite', 'FavoritesController#addFavorite');
+$router->map('GET', '/favorites/deleteFavorite/[i:id]', 'FavoritesController#deleteFavorite');
+$router->map('GET', '/favorites/editFavorite/[i:id]', 'FavoritesController#editFavorite');
+$router->map('POST', '/favorites/editFavorite', 'FavoritesController#editFavorite');
 
 $match = $router->match();
 

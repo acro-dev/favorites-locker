@@ -34,14 +34,18 @@ class FavoritesController extends Controller
         }
     }
 
-    public function deleteFavorite($id)
+    public function deleteFavorite($params)
     {
+        echo 'hohoh';
+        extract($params);
         $this->FavoritesModel->removeById($id);
         $this->goHome();
     }
 
-    public function editFavorite($id = '')
+    public function editFavorite($params = [])
     {
+        extract($params);
+
         if ($id != '') {
             $favorite = $this->FavoritesModel->findOneById($id);
             $this->render('editFavorite', ['favorite' => $favorite]);

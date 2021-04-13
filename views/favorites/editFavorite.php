@@ -1,3 +1,4 @@
+<h1>Editer un favori</h1>
 <form action="/favorites/editFavorite" method="POST">
   <!--
   'icon' => null

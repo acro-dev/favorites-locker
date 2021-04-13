@@ -17,21 +17,21 @@
         <h2>Favlocker</h2>
         <h3><i class="far fa-star"></i> Mes favoris</h3>
         <ul>
-          <li><a href="/dashboard/sortFav/name">Lister par nom</a></li>
-          <li><a href="/dashboard/sortFav/category">Lister par catégorie</a></li>
+          <li><i class="fas fa-angle-right"></i> <a href="/dashboard/sort-by/name">Lister par nom</a></li>
+          <li><i class="fas fa-angle-right"></i> <a href="/dashboard/sort-by/categories">Lister par catégorie</a></li>
           <!-- <li>Mes favoris</li> -->
         </ul>
         <h3><i class="fas fa-filter"></i> Filtrer</h3>
         <ul>
           <?php foreach ($listCategory as $category) : ?>
-            <li><?= $category ?></li>
+            <li><i class="fas fa-angle-right"></i> <a href="/dashboard/show-category/<?= slugify($category) ?>"><?= $category ?></a></li>
           <?php endforeach; ?>
         </ul>
         <h3><i class="fas fa-user-edit"></i><?= $_SESSION['username'] ?></h3>
         <ul>
-          <li>Modifier mon nom</li>
-          <li>Modifier mon e-mail</li>
-          <li>Modifier mon mot de passe</li>
+          <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userID'] ?>">Modifier mon nom</li>
+          <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userID'] ?>">Modifier mon e-mail</li>
+          <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userID'] ?>">Modifier mon mot de passe</li>
         </ul>
         <a class="logout" href="/logout">Se déconnecter</a>
       </div>

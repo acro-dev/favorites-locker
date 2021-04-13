@@ -16,14 +16,27 @@ class DashboardController extends Controller
         }
     }
 
-    public function index()
+    public function index($params = [])
     {
-        $cookie = 'sort_fav-' . $_SESSION['userID'];
-        $order = $_COOKIE[$cookie] !== 'name' ? 'category_id, name' : 'name';
+        extract($params);
+
+        if (isset($sortBy)) {
+            switch ($sortBy) {
+                case 'name':
+                    $order = 'name';
+                    break;
+                case 'categories':
+                    $order = 'name, category_id';
+                    break;
+            }
+        } else {
+            $order = 'name';
+        }
+
         $this->loadmodel("FavoritesModel");
         $favorites = $this->FavoritesModel->findAllByUserId($order);
 
-        $this->render('dashboard', ['favorites' => $favorites]);
+        $this->render('dashboard', ['favorites' => $favorites, 'order' => $order]);
     }
     public function profile()
     {
@@ -36,6 +49,5 @@ class DashboardController extends Controller
     {
         $name = 'sort_fav-' . $_SESSION['userID'];
         setcookie($name, $filter, time() + (60 * 60 * 24 * 365), "/");
-        $this->goHome();
     }
 }

@@ -71,19 +71,20 @@ body {
 
     .sideMenu ul li {
         margin-bottom: 0.5rem;
-        margin-left: 0.75rem;
     }
-    .sideMenu ul li::before {
-        content: "-";
-        margin-right: 0.5rem;
+    .sideMenu ul li i {
         color: var(--primary-color);
     }
+
     .sideMenu ul li:last-child {
         margin-bottom: 0;
     }
 
     .sideMenu a {
         color: white;
+        &:hover {
+            color: var(--primary-color);
+        }
     }
 
     .sideMenu .logout {
