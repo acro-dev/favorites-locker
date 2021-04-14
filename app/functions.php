@@ -1,5 +1,5 @@
 <?php
-function removeAccent($chaine)
+function removeAccent(string $chaine): string
 {
     $unwanted_array = array(
         'Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
@@ -8,12 +8,10 @@ function removeAccent($chaine)
         'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
         'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y'
     );
-    $str = strtr($chaine, $unwanted_array);
-
-    return $str;
+    return strtr($chaine, $unwanted_array);
 }
 
-function slugify($chaine)
+function slugify(string $chaine): string
 {
     $str = removeAccent($chaine);
     $str = strtolower($str);

@@ -7,8 +7,8 @@ use PDO;
 
 class CategoriesModel extends Model
 {
-    public $id;
-    private $name;
+    public int $id;
+    private string $name;
 
     public function __construct()
     {
@@ -17,38 +17,29 @@ class CategoriesModel extends Model
     }
 
     /**
-     * Get the value of id
+     * Getters and Setters
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Get the value of name
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function findCategory($category)
+    public function findCategory(string $category): array
     {
         $sql = "SELECT * FROM categories WHERE name = '" . $category . "'";
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
+        $query = $this->_connection->query($sql);
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 }

@@ -6,64 +6,73 @@ use App\Controller;
 
 class FavoritesController extends Controller
 {
+    private object $favorite;
+    private object $category;
+
     public function __construct()
     {
-        $this->loadmodel('FavoritesModel');
+        $this->favorite = $this->loadModel('FavoritesModel');
     }
 
-    public function verifyUrl($url)
+    public function verifyUrl($url): string
     {
-        if (preg_match('/(http:\/\/)|(https:\/\/)/A', $url) == 0) {
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        if (preg_match('/(http:\/\/)|(https:\/\/)/A', $url) === 0) {
             $url = 'http://' . $url;
         }
 
         return $url;
     }
 
-    public function addFavorite()
+    public function addFavorite(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-            $this->FavoritesModel->setUrl($this->verifyUrl(strtolower($_POST['fav-url'])));
-            $this->FavoritesModel->setName(ucfirst(strtolower($_POST['fav-name'])));
+            $this->favorite->setUrl($this->verifyUrl(strtolower($_POST['fav-url'])));
+            $this->favorite->setName(ucfirst(strtolower($_POST['fav-name'])));
 
-            $this->FavoritesModel->addFavorite();
+            $this->favorite->addFavorite();
 
-            $this->goHome();
+            $this->goTo();
         }
     }
 
-    public function deleteFavorite($params)
+    public function deleteFavorite($id): void
     {
-        echo 'hohoh';
-        extract($params);
-        $this->FavoritesModel->removeById($id);
-        $this->goHome();
+        $this->favorite->removeById($id);
+        $this->goTo();
     }
 
-    public function editFavorite($params = [])
+    public function editFavorite($id): void
     {
-        extract($params);
 
-        if ($id != '') {
-            $favorite = $this->FavoritesModel->findOneById($id);
-            $this->render('editFavorite', ['favorite' => $favorite]);
-        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->FavoritesModel->setId($_POST['id']);
-            $this->FavoritesModel->setName($_POST['name']);
-            $this->FavoritesModel->setUrl($this->verifyUrl($_POST['url']));
-            $category = $_POST['category'];
-            $this->loadmodel('CategoriesModel');
-            $existingCategory = $this->CategoriesModel->findCategory($category);
-            if ($category == $existingCategory['name']) {
-                $this->FavoritesModel->setCategory_id($existingCategory['id']);
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $favorite = $this->favorite->findOneById($id);
+            if(!$favorite || $favorite['user_id']!== $_SESSION['userId']){
+                $data['error'] = 'Hmmm, une erreur est survenue. Veuillez réessayer plus tard.';
+                $this->goTo();
             } else {
-                $this->FavoritesModel->setCategory_id(NULL);
+                $this->render('editFavorite', ['favorite' => $favorite]);
             }
-            $this->FavoritesModel->editFavorite();
+        }
 
-            $this->goHome();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $this->favorite->setId($id);
+            $this->favorite->setName($_POST['name']);
+            $this->favorite->setUrl($this->verifyUrl($_POST['url']));
+            $category = $_POST['category'];
+            $this->category = $this->loadModel('CategoriesModel');
+            $existingCategory = $this->category->findCategory($category);
+            if ($category === $existingCategory['name']) {
+                $this->favorite->setCategory_id($existingCategory['id']);
+            } else {
+                $this->favorite->setCategory_id(NULL);
+            }
+            $this->favorite->editFavorite();
+
+            $this->goTo('/dashboard/view/'.$_COOKIE['lastView']);
         }
     }
 }

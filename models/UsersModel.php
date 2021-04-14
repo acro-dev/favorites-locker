@@ -7,10 +7,10 @@ use PDO;
 
 class UsersModel extends Model
 {
-    protected $id;
-    protected $username;
-    protected $email;
-    protected $password;
+    private int $id;
+    private string $username;
+    private string $email;
+    private string $password;
 
     public function __construct()
     {
@@ -18,18 +18,18 @@ class UsersModel extends Model
         $this->getConnection();
     }
 
-    public function login($email, $password)
+    public function login($email, $password): array
     {
-        $data = $this->checkEmail($email);
+        $user = $this->getUserByEmail($email);
 
-        if (!empty($data)) {
-            $hash = $data['password'];
+        if (!empty($user)) {
+            $hash = $user['password'];
             if (password_verify($password, $hash)) {
-                return $data;
+                return $user;
             }
-        } else {
-            return false;
         }
+        return [];
+
     }
 
     public function signup($data)
@@ -38,20 +38,18 @@ class UsersModel extends Model
         $this->email = $data['email'];
         $this->password = $data['password'];
 
-        $sql = 'INSERT INTO ' . $this->table . ' (username,email,password) VALUES (?,?,?)';
+        $sql = 'INSERT INTO users (username,email,password) VALUES (?,?,?)';
         $query = $this->_connection->prepare($sql);
-        $createUser = $query->execute([$this->username, $this->email, $this->password]);
-
-        return $createUser;
+        return $query->execute([$this->username, $this->email, $this->password]);
     }
 
-    public function checkEmail($email)
+    public function getUserByEmail($email)
     {
-        $sql = 'SELECT * FROM ' . $this->table . ' WHERE email="' . $email . '"';
+        $sql = "SELECT * FROM users WHERE email='$email'";
         $query = $this->_connection->prepare($sql);
         $query->execute();
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        return $data;
+
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public function updateUser($property, $newValue, $id)

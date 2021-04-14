@@ -6,12 +6,14 @@ use App\Controller;
 
 class UsersController extends Controller
 {
+    private object $user;
+
     public function __construct()
     {
-        $this->loadmodel('UsersModel');
+        $this->user = $this->loadModel('UsersModel');
     }
 
-    public function verifyUsername($username)
+    public function verifyUsername($username): string
     {
         /**
          * Username must not be empty.
@@ -19,47 +21,57 @@ class UsersController extends Controller
          */
         if (empty($username)) {
             return "Votre nom d'utilisateur doit être renseigné.";
-        } else if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
-            return "Votre nom d'utilisateur ne peut contenir que des lettres ou des chiffres.";
-        } else {
-            return '';
         }
+
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+            return "Votre nom d'utilisateur ne peut contenir que des lettres ou des chiffres.";
+        }
+
+        return '';
     }
 
-    public function verifyEmail($email)
+    public function verifyEmail($email): string
     {
         /**
          * Email must match pattern. And must be unique.
          */
         if (empty($email)) {
             return "L'adresse email doit être renseigné.";
-        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "Adresse email non valide.";
-        } else if ($this->UsersModel->checkEmail($email) !== false) {
-            return "Cette adresse mail est déjà utilisée.";
-        } else {
-            return '';
         }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "Adresse email non valide.";
+        }
+
+        if ($this->user->getUserByEmail($email) !== false) {
+            return "Cette adresse mail est déjà utilisée.";
+        }
+
+        return '';
     }
 
-    public function verifyPassword($password, $confirmPassword = '')
+    public function verifyPassword($password, $confirmPassword = ''): string
     {
         /**
          * Password must be at least 6 characters long,
-         * Must match with confim password.
+         * Must match with confirm password.
          */
         if (empty($password)) {
             return "Password vide.";
-        } else if (strlen($password) < 6) {
-            return "Votre mot de passe doit contenir au moins 6 caractères.";
-        } else if ($password != $confirmPassword) {
-            return "Vos mots de passe ne correspondents pas.";
-        } else {
-            return '';
         }
+
+        if (strlen($password) < 6) {
+            return "Votre mot de passe doit contenir au moins 6 caractères.";
+        }
+
+        if ($password !== $confirmPassword) {
+            return "Vos mots de passe ne correspondents pas.";
+        }
+
+        return '';
     }
 
-    public function signup()
+    public function signup(): void
     {
         $data = [
             'username' => '',
@@ -71,7 +83,7 @@ class UsersController extends Controller
             'passwordError' => ''
         ];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $data = [
@@ -93,12 +105,12 @@ class UsersController extends Controller
              */
             if (empty($data['usernameError']) && empty($data['emailError']) && empty($data['passwordError'])) {
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-                $createUser = $this->UsersModel->signup($data);
+                $createUser = $this->user->signup($data);
 
                 if ($createUser) {
-                    header('Location: /users/login');
+                    $this->goTo('/dashboard');
                 } else {
-                    echo "Une érreur s'est produite lors de l'inscription. Veuillez reéssayer s'il vous plait.";
+                    echo "Une erreur s'est produite lors de l'inscription. Veuillez réessayer s'il vous plait.";
                 }
             }
         }
@@ -106,38 +118,34 @@ class UsersController extends Controller
         $this->render('signup', $data);
     }
 
-    public function login()
+    public function login(): void
     {
+        // Is an user already connected ?
+        if (isset($_SESSION['userId'])) {
+            $this->goTo('/dashboard');
+        }
+
         $data = [
-            'emailError' => '',
-            'passwordError' => ''
+            'error' => ''
         ];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $data = [
                 'email' => trim($_POST['email']),
                 'password' => trim($_POST['password']),
-                'emailError' => '',
-                'passwordError' => ''
             ];
 
-            if (empty($data['email'])) {
-                $data['emailError'] = "Email vide";
-            }
-            if (empty($data['password'])) {
-                $data['passwordError'] = "Password vide.";
-            }
 
             if (empty($data['usernameError']) && empty($data['passwordError'])) {
-                $loggedInUser = $this->UsersModel->login($data['email'], $data['password']);
+                $loggedInUser = $this->user->login($data['email'], $data['password']);
 
                 if ($loggedInUser) {
                     $this->createSession($loggedInUser);
-                    $this->goHome();
+                    $this->goTo();
                 } else {
-                    $data['passwordError'] = 'Email or password was wrong';
+                    $data['error'] = 'Email ou mot de passe incorrect.';
                 }
             }
         }
@@ -145,68 +153,68 @@ class UsersController extends Controller
         $this->render('login', $data);
     }
 
-    public function createSession($user)
+    public function createSession($user): bool
     {
-        $_SESSION['userID'] = $user['id'];
+        $_SESSION['userId'] = $user['id'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['username'] = ucfirst($user['username']);
+
+        return true;
     }
 
-    public function logout()
+    public function logout(): void
     {
         session_start();
         unset($_SESSION);
         session_unset();
         session_destroy();
 
-        $this->goHome();
-
-        exit();
+        $this->goTo('/');
     }
 
-    public function editProfile($params)
+    public function editProfile($property)
     {
-        // $error = '';
-        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        //     $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        //     $newValue = $_POST[$property];
+        $error = '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $newValue = $_POST[$property];
 
-        //     switch ($property) {
-        //         case 'email':
-        //             $error = $this->verifyEmail($newValue);
-        //             break;
+            switch ($property) {
+                case 'email':
+                    $error = $this->verifyEmail($newValue);
+                    break;
 
-        //         case 'username':
-        //             $error = $this->verifyUsername($newValue);
-        //             break;
-        //     }
+                case 'username':
+                    $error = $this->verifyUsername($newValue);
+                    break;
+            }
 
-        //     if (empty($error)) {
+            if (empty($error)) {
 
-        //         $id = $_POST['id'];
+                $id = $_POST['id'];
 
-        //         $this->UsersModel->updateUser($property, $newValue, $id);
+                $this->user->updateUser($property, $newValue, $id);
 
-        //         $user = $this->UsersModel->getOne($id);
-        //         $this->createSession($user);
+                $user = $this->user->getOne($id);
+                $this->createSession($user);
 
-        //         header('Location: /dashboard/profile/' . $id);
-        //     }
-        // }
+                header('Location: /dashboard/profile/' . $id);
+            }
+        }
 
-        // $data = $this->UsersModel->getOne($_SESSION['userID']);
-        // $data['property'] = $property;
-        // switch ($property) {
-        //     case 'email':
-        //         $data['propertyName'] = "e-mail";
-        //         break;
-        //     case 'username':
-        //         $data['propertyName'] = "nom d'utilisateur";
-        //         break;
-        // }
+        $data = $this->user->getOne($_SESSION['userID']);
+        $data['property'] = $property;
+        switch ($property) {
+            case 'email':
+                $data['propertyName'] = "e-mail";
+                break;
+            case 'username':
+                $data['propertyName'] = "nom d'utilisateur";
+                break;
+        }
 
-        // $data['error'] = $error;
+        $data['error'] = $error;
 
-        $this->render('editProfile');
+        $this->render('editProfile', $data);
     }
 }

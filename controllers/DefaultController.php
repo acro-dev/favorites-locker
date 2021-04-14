@@ -6,10 +6,10 @@ use App\Controller;
 
 class DefaultController extends Controller
 {
-    public function index()
+    public function index(): void
     {
-        if (isset($_SESSION['userID'])) {
-            header('Location: /dashboard');
+        if (isset($_SESSION['userId'])) {
+            $this->goTo('/dashboard');
         } else {
             $this->render('index');
         }

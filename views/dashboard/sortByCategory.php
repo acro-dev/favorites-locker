@@ -3,14 +3,14 @@
     $currentCategory = 'No Category Set';
     ?>
 
-    <?php foreach ($data['favorites'] as $fav) : ?>
+    <?php foreach ($favorites as $fav) : ?>
         <?php
         if ($fav['category'] !== $currentCategory) {
             if ($currentCategory !== 'No Category Set') {
                 echo '</div>';
             }
             echo '<div class="categoryList">';
-            $category = ($fav['category'] != NULL) ? $fav['category'] : 'Divers';
+            $category = $fav['category'] ?? 'Divers';
             echo '<h2>' . $category . '</h2>';
             $currentCategory = $fav['category'];
         }

@@ -7,18 +7,17 @@ use PDOException;
 
 abstract class Model
 {
-    private $host = "localhost";
-    private $dbname = "favlocker";
-    private $username = "favlocker";
-    private $password = "";
+    private string $host = "localhost";
+    private string $dbname = "favlocker";
+    private string $username = "favlocker";
+    private string $password = "";
 
-    protected $_connection;
+    protected PDO $_connection;
 
-    protected $table;
+    protected string $table;
 
-    public function getConnection()
+    public function getConnection(): void
     {
-        $this->_connection = null;
         try {
             $this->_connection = new PDO(
                 'mysql:host=' . $this->host . '; dbname=' . $this->dbname,
@@ -31,42 +30,36 @@ abstract class Model
         }
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $sql = "SELECT * FROM " . $this->getTable();
-        $query = $this->_connection->prepare($sql);
-
-        $query->execute();
+        $query = $this->_connection->query($sql);
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getOne($id)
+
+    public function getOne($id): array
     {
         $sql = "SELECT * FROM " . $this->getTable() . " WHERE id=" . $id;
-        $query = $this->_connection->exec($sql);
+        $query = $this->_connection->query($sql);
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function removeById($id)
+    public function removeById($id): void
     {
         $sql = 'DELETE FROM ' . $this->getTable() . ' WHERE id=' . $id;
         $this->_connection->exec($sql);
     }
 
     /**
-     * Get the value of table
+     * Getters and Setters
      */
-    public function getTable()
+    public function getTable(): string
     {
         return $this->table;
     }
 
-    /**
-     * Set the value of table
-     *
-     * @return  self
-     */
-    public function setTable($table)
+    public function setTable(string $table): self
     {
         $this->table = $table;
 

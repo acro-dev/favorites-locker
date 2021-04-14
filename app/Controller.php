@@ -4,30 +4,30 @@ namespace App;
 
 abstract class Controller
 {
-    public function loadmodel($model)
+    public function loadModel(string $model): object
     {
         $modelPath = 'Models\\' . $model;
-        $this->$model = new $modelPath;
+        return new $modelPath;
     }
 
-    public function render($file, $data = [])
+    public function render(string $file, array $data = []): void
     {
         $controller = str_replace(['Controllers\\', 'Controller'], '', get_class($this));
 
-        extract($data);
+        extract($data, EXTR_OVERWRITE);
         ob_start();
         require_once('../views/' . strtolower($controller) . '/' . $file . '.php');
         $content = ob_get_clean();
-        if (isset($_SESSION['userID'])) {
+        if (isset($_SESSION['userId'])) {
             require_once('../views/layout/dashboard.php');
         } else {
             require_once('../views/layout/default.php');
         }
     }
 
-    public function goHome()
+    public function goTo(string $location = '/'): void
     {
-        header('location: /');
+        header('location: ' . $location);
         exit;
     }
 }

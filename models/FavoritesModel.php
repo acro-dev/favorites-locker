@@ -7,32 +7,33 @@ use PDO;
 
 class FavoritesModel extends Model
 {
-    private $id;
-    private $name;
-    private $url;
-    private $icon;
-    private $fav;
-    private $creation_date;
-    private $user_id;
-    private $category_id;
+    private int $id;
+    private string $name;
+    private string $url;
+    private string $icon;
+    private bool $fav;
+    private \DateTime $creation_date;
+    private int $user_id;
+    private int $category_id;
 
     public function __construct()
     {
         $this->setTable("favorites");
         $this->getConnection();
     }
-    public function findAllByUserId($order = 'name')
+
+    public function getAllByUserId(int $id,string $order = 'name'): array
     {
         $sql = "SELECT favorites.*,categories.name as category FROM favorites
             LEFT JOIN categories ON favorites.category_id = categories.id
-            WHERE user_id=" . $_SESSION['userID'] . "
+            WHERE user_id=" . $id."
             ORDER BY " . $order;
 
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
+        $query = $this->_connection->query($sql);
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function findOneById($id)
     {
         $sql = "SELECT favorites.*,categories.name as category FROM favorites
@@ -60,149 +61,92 @@ class FavoritesModel extends Model
     }
 
     /**
-     * Get the value of id
+     * Getters and Setters
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Get the value of name
-     */
-    public function getName()
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get the value of url
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * Set the value of url
-     *
-     * @return  self
-     */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * Get the value of icon
-     */
-    public function getIcon()
+    public function getIcon(): string
     {
         return $this->icon;
     }
 
-    /**
-     * Set the value of icon
-     *
-     * @return  self
-     */
-    public function setIcon($icon)
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
         return $this;
     }
 
-    /**
-     * Get the value of fav
-     */
-    public function getFav()
+    public function getFav(): bool
     {
         return $this->fav;
     }
 
-    /**
-     * Set the value of fav
-     *
-     * @return  self
-     */
-    public function setFav($fav)
+    public function setFav(bool $fav): self
     {
         $this->fav = $fav;
 
         return $this;
     }
 
-    /**
-     * Get the value of creation_date
-     */
-    public function getCreation_date()
+    public function getCreation_date(): \DateTime
     {
         return $this->creation_date;
     }
 
-    /**
-     * Get the value of user_id
-     */
-    public function getUser_id()
+    public function getUser_id(): int
     {
         return $this->user_id;
     }
 
-    /**
-     * Set the value of user_id
-     *
-     * @return  self
-     */
-    public function setUser_id($user_id)
+    public function setUser_id(int $user_id): self
     {
         $this->user_id = $user_id;
 
         return $this;
     }
 
-    /**
-     * Get the value of category_id
-     */
-    public function getCategory_id()
+    public function getCategory_id(): int
     {
         return $this->category_id;
     }
 
-    /**
-     * Set the value of category_id
-     *
-     * @return  self
-     */
-    public function setCategory_id($category_id)
+    public function setCategory_id(int $category_id): self
     {
         $this->category_id = $category_id;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
         return $this;
     }

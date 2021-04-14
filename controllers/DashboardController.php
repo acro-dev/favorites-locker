@@ -6,48 +6,53 @@ use App\Controller;
 
 class DashboardController extends Controller
 {
+    private object $user;
+    private object $favorites;
+
     public function __construct()
     {
-        if (!isset($_SESSION['userID'])) {
-            $this->goHome();
+        if (!isset($_SESSION['userId'])) {
+            $this->goTo();
         }
-        if (!isset($_COOKIE['sort_fav-' . $_SESSION['userID']])) {
-            $this->sortFav();
-        }
+        $this->favorites = $this->loadModel("FavoritesModel");
+
     }
 
-    public function index($params = [])
+    public function view(string $view = 'by-name'): void
     {
-        extract($params);
+        $favorites = $this->favorites->getAllByUserId($_SESSION['userId']);
+        $categories = $this->sortCategory($favorites);
 
-        if (isset($sortBy)) {
-            switch ($sortBy) {
-                case 'name':
-                    $order = 'name';
-                    break;
-                case 'categories':
-                    $order = 'name, category_id';
-                    break;
+        $categoryKey = array_search($view, array_column($categories, 'slug'), true);
+
+        if ($categoryKey !== false) {
+            foreach ($favorites as $i => $favorite) {
+                if ($favorite['category'] !== $categories[$categoryKey]['name']) {
+                    unset($favorites[$i]);
+                }
             }
-        } else {
-            $order = 'name';
         }
 
-        $this->loadmodel("FavoritesModel");
-        $favorites = $this->FavoritesModel->findAllByUserId($order);
+        setcookie('lastView',$view,0,'/');
 
-        $this->render('dashboard', ['favorites' => $favorites, 'order' => $order]);
-    }
-    public function profile()
-    {
-        $this->loadmodel('UsersModel');
-        $data = $this->UsersModel->getOne($_SESSION['userID']);
-        $this->render('profile', $data);
+        $this->render('dashboard', [
+            'view' => $view,
+            'favorites' => $favorites,
+            'categories' => $categories
+        ]);
     }
 
-    public function sortFav($filter = "name")
+    public function sortCategory(array $favorites): array
     {
-        $name = 'sort_fav-' . $_SESSION['userID'];
-        setcookie($name, $filter, time() + (60 * 60 * 24 * 365), "/");
+        $categories = array();
+
+        foreach ($favorites as $fav) {
+            if ($fav['category'] !== null &&
+                !in_array($fav['category'], array_column($categories, 'name'), true)) {
+                $categories[] = ['name'=>$fav['category'], 'slug'=>slugify($fav['category'])];
+            }
+        }
+        sort($categories);
+        return $categories;
     }
 }
