@@ -24,7 +24,7 @@
                 </li>
                 <!-- <li>Mes favoris</li> -->
             </ul>
-            <?php if (isset($categories)) : ?>
+            <?php if (isset($categories) && !empty($categories)) : ?>
             <h3><i class="fas fa-filter"></i> Filtrer</h3>
             <ul>
                 <?php foreach ($categories as $category) : ?>
@@ -35,11 +35,11 @@
             <?php endif; ?>
             <h3><i class="fas fa-user-edit"></i><?= $_SESSION['username'] ?></h3>
             <ul>
-                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userId'] ?>">Modifier
+                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username">Modifier
                         mon nom</li>
-                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userId'] ?>">Modifier
+                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/e-mail">Modifier
                         mon e-mail</li>
-                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/username/<?= $_SESSION['userId'] ?>">Modifier
+                <li><i class="fas fa-angle-right"></i> <a href="/users/edit/password">Modifier
                         mon mot de passe</li>
             </ul>
             <a class="logout" href="/logout">Se déconnecter</a>

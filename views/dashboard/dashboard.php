@@ -6,9 +6,14 @@
         <input type="submit" value="+"/>
     </form>
 </div>
+
 <?php
-if ($view === 'by-name') {
-    require_once '../views/dashboard/sortByName.php';
+if (!empty($favorites)) {
+    if ($view === 'by-name') {
+        require_once '../views/dashboard/sortByName.php';
+    } else {
+        require_once '../views/dashboard/sortByCategory.php';
+    }
 } else {
-    require_once '../views/dashboard/sortByCategory.php';
+    echo 'Pas de favoris enregistré !';
 }

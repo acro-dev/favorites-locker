@@ -12,6 +12,8 @@ class FavoritesController extends Controller
     public function __construct()
     {
         $this->favorite = $this->loadModel('FavoritesModel');
+        $this->category = $this->loadModel('CategoriesModel');
+
     }
 
     public function verifyUrl($url): string
@@ -31,6 +33,12 @@ class FavoritesController extends Controller
 
             $this->favorite->setUrl($this->verifyUrl(strtolower($_POST['fav-url'])));
             $this->favorite->setName(ucfirst(strtolower($_POST['fav-name'])));
+            $this->favorite->setUser_id($_SESSION['userId']);
+            if ($_POST['category'] !== '') {
+                $this->favorite->setCategory_id($_POST['category']);
+            } else {
+                $this->favorite->setCategory_id(0);
+            }
 
             $this->favorite->addFavorite();
 
@@ -48,12 +56,17 @@ class FavoritesController extends Controller
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $favorite = $this->favorite->findOneById($id);
-            if(!$favorite || $favorite['user_id']!== $_SESSION['userId']){
+            $favorite = $this->favorite->getOneById($id);
+            $categories = $this->category->sortCategory($this->category->getAll());
+
+            if (!$favorite || $favorite['user_id'] !== $_SESSION['userId']) {
                 $data['error'] = 'Hmmm, une erreur est survenue. Veuillez réessayer plus tard.';
-                $this->goTo();
+                $this->goTo('/dashboard');
             } else {
-                $this->render('editFavorite', ['favorite' => $favorite]);
+                $this->render('editFavorite', [
+                    'favorite' => $favorite,
+                    'categories' => $categories
+                ]);
             }
         }
 
@@ -62,17 +75,24 @@ class FavoritesController extends Controller
             $this->favorite->setId($id);
             $this->favorite->setName($_POST['name']);
             $this->favorite->setUrl($this->verifyUrl($_POST['url']));
-            $category = $_POST['category'];
-            $this->category = $this->loadModel('CategoriesModel');
-            $existingCategory = $this->category->findCategory($category);
-            if ($category === $existingCategory['name']) {
+
+            $this->category->setName = trim($_POST['category']);
+            $this->category->setSlug = slugify($this->category->getName);
+
+            $existingCategory = $this->category->getCategoryByName($this->category->getName);
+
+            if ($existingCategory) {
                 $this->favorite->setCategory_id($existingCategory['id']);
             } else {
-                $this->favorite->setCategory_id(NULL);
+                $this->category->addCategory();
+
+                $newCategory = $this->category->getCategoryBySlug($categorySlug);
+                $this->favorite->setCategory_id($newCategory['id']);
             }
+
             $this->favorite->editFavorite();
 
-            $this->goTo('/dashboard/view/'.$_COOKIE['lastView']);
+            $this->goTo('/dashboard/view/' . $_COOKIE['lastView']);
         }
     }
 }

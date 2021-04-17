@@ -108,7 +108,7 @@ class UsersController extends Controller
                 $createUser = $this->user->signup($data);
 
                 if ($createUser) {
-                    $this->goTo('/dashboard');
+                    $this->goTo('/login');
                 } else {
                     echo "Une erreur s'est produite lors de l'inscription. Veuillez réessayer s'il vous plait.";
                 }

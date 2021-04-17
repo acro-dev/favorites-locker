@@ -3,6 +3,7 @@
 namespace Models;
 
 use App\Model;
+use DateTime;
 use PDO;
 
 class FavoritesModel extends Model
@@ -12,9 +13,9 @@ class FavoritesModel extends Model
     private string $url;
     private string $icon;
     private bool $fav;
-    private \DateTime $creation_date;
+    private DateTime $creation_date;
     private int $user_id;
-    private int $category_id;
+    private int $category_id = 0;
 
     public function __construct()
     {
@@ -34,7 +35,7 @@ class FavoritesModel extends Model
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function findOneById($id)
+    public function getOneById($id)
     {
         $sql = "SELECT favorites.*,categories.name as category FROM favorites
             LEFT JOIN categories ON favorites.category_id = categories.id
@@ -48,16 +49,20 @@ class FavoritesModel extends Model
 
     public function addFavorite()
     {
-        $sql = 'INSERT INTO favorites (name,url,user_id) VALUES (?,?,?)';
+        $sql = 'INSERT INTO favorites (name,url,user_id,category_id) VALUES (?,?,?,?)';
         $stmt = $this->_connection->prepare($sql);
-        $stmt->execute([$this->getName(), $this->getUrl(), $_SESSION['userID']]);
+        $stmt->execute([
+            $this->getName(),
+            $this->getUrl(),
+            $this->getUser_id(),
+            $this->getCategory_id()
+        ]);
     }
 
     public function editFavorite()
     {
         $sql = 'UPDATE ' . $this->table . ' SET name="' . $this->name . '", url="' . $this->url . '", category_id="' . $this->category_id . '" WHERE id=' . $this->id;
-        $stmt = $this->_connection->prepare($sql);
-        $stmt->execute();
+        $this->_connection->exec($sql);
     }
 
     /**
@@ -122,7 +127,7 @@ class FavoritesModel extends Model
         return $this;
     }
 
-    public function getCreation_date(): \DateTime
+    public function getCreation_date(): DateTime
     {
         return $this->creation_date;
     }

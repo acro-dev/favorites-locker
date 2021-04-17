@@ -18,7 +18,7 @@ class UsersModel extends Model
         $this->getConnection();
     }
 
-    public function login($email, $password): array
+    public function login(string $email, string $password): array
     {
         $user = $this->getUserByEmail($email);
 
@@ -32,7 +32,7 @@ class UsersModel extends Model
 
     }
 
-    public function signup($data)
+    public function signup(array $data): bool
     {
         $this->username = $data['username'];
         $this->email = $data['email'];
@@ -43,20 +43,18 @@ class UsersModel extends Model
         return $query->execute([$this->username, $this->email, $this->password]);
     }
 
-    public function getUserByEmail($email)
+    public function getUserByEmail(string $email): array
     {
         $sql = "SELECT * FROM users WHERE email='$email'";
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
+        $query = $this->_connection->query($sql);
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($property, $newValue, $id)
+    public function updateUser(string $property, string $newValue, int $id): void
     {
         $sql = 'UPDATE ' . $this->table . ' SET ' . $property . '="' . $newValue . '" WHERE id=' . $id;
-        $query = $this->_connection->prepare($sql);
-        $query->execute();
+        $query = $this->_connection->query($sql);
     }
 
     /**

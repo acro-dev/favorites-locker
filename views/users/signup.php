@@ -3,7 +3,7 @@
 
         <h1 class="text-center">S'inscrire</h1>
 
-        <form action=" /users/signup" method="POST">
+        <form action=" /signup" method="POST">
             <div class="mb-3">
                 <label class="form-label" for="username">Nom d'utilisateur</label>
                 <input class="form-control" type="text" id="username" name="username" value="<?= $data['username'] ?>">
